@@ -1,4 +1,4 @@
-from pytube import YouTube, Playlist
+from pytube import YouTube, Playlist, extract
 from pytube.cli import on_progress
 import os
 from pathlib import Path
@@ -16,8 +16,16 @@ def Dplaylist(link, res="360p"):
     video_urls = p.video_urls
     for video in video_urls:
         yt = YouTube(video, on_progress_callback=on_progress)
-        yt.streams.filter(res=res).first().download(output_path=output_path)
-
+        file_path = output_path + '\\' + yt.title + '.mp4'
+        if os.path.exists(file_path):
+            pass
+        else:
+            if extract.is_age_restricted(yt.watch_html):
+                print(yt.title + "is aged restricted and couldn't be download")
+                pass
+            else:
+                yt.streams.filter(res=res).first().download(output_path=output_path)
+            
 
 def Dlink(link, res="360p"):
     yt = YouTube(link, on_progress_callback=on_progress)
