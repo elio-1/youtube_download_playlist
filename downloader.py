@@ -55,6 +55,8 @@ def arg_parse():
             case 'audio' | 'a' | '-a' | 'novid' | 'song':
                 res = None
                 audio_only = True
+            case '-h'|'--help':
+                print(f"Usage {sys.argv[0]} [options]\nOptions: \n[resolutions] ex: {sys.argv[0]} 1080p\n[audio only] ex: {sys.argv[0]} novid | {sys.argv[0]} audio | {sys.argv[0]} a\nIf no arguments are specify the default is video with 360p")
             case _:
                 pass
     return res, audio_only
