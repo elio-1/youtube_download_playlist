@@ -24,6 +24,11 @@ To specify a resolution
 ```sh
 python downloader.py 720p
 ```
+Audio only
+```sh
+python downloader.py song
+```
+
 Then you are going to get prompt for a link
 ```sh
 Link: https://www.youtube.com/playlist?list=PL8dPuuaLjXtNlUrzyH5r6jN9ulIgZBpdo
