@@ -5,7 +5,7 @@ from pathlib import Path
 import sys
 import re
 
-def Dplaylist(link, res="360p"):
+def Dplaylist(link:str, res="360p", only_audio=False):
     p = Playlist(link)
     title = p.title.replace(":", "")
     output_path = str(Path.home() / "Downloads" / title)
@@ -24,24 +24,49 @@ def Dplaylist(link, res="360p"):
                 print(yt.title + "is aged restricted and couldn't be download")
                 pass
             else:
-                yt.streams.filter(res=res).first().download(output_path=output_path)
+                yt.streams.filter(res=res,only_audio=only_audio).first().download(output_path=output_path)
             
 
-def Dlink(link, res="360p"):
+def Dlink(link:str, res="360p", only_audio=False):
     yt = YouTube(link, on_progress_callback=on_progress)
     output_path = str(Path.home() / "Downloads")
-    yt.streams.filter(res=res).first().download(output_path=output_path)
+    yt.streams.filter(res=res, only_audio=only_audio).first().download(output_path=output_path)
 
 
-link = input("Link: ")
-if len(sys.argv) == 2:
-    res = sys.argv[1]
-else:
-    res = "360p"
+def arg_parse():
+    audio_only = False
+    res = '360p'
+    if len(sys.argv) == 2:
+        match sys.argv[1]:
+            case '144p':
+                res = '144p'
+            case '240p':
+                res = '240p'
+            case '360p'| 360:
+                res = '360p'
+            case '480p'|480:
+                res = '480p'
+            case '720p' | 720 :
+                res = "720p"
+            case '720p60':
+                res = '720p'
+            case '1080p' | '1080p60' | 'hd' | 1080:
+                res = '1080p60'
+            case 'audio' | 'a' | '-a' | 'novid' | 'song':
+                res = None
+                audio_only = True
+            case _:
+                pass
+    return res, audio_only
 
-is_playlist = re.search("list", link) != None
+def main():
+    link = input("Link: ")
+    res, audio_only = arg_parse()
+    is_playlist = re.search("list", link) != None
+    if is_playlist:
+        Dplaylist(link, res=res, only_audio=audio_only)
+    else:
+        Dlink(link, res=res, only_audio=audio_only)
 
-if is_playlist:
-    Dplaylist(link, res)
-else:
-    Dlink(link, res)
+if __name__ == "__main__":
+    main()
