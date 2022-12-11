@@ -1,7 +1,7 @@
 # youtube_download_playlist
 
 
-Download a youtube playlist
+Download a youtube playlist or a youtube video/song
 
 
 ## Installation
